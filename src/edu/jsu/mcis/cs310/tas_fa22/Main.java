@@ -1,3 +1,7 @@
+/*
+    Authors: Aashaya Aryal, Jakob Skipper, 
+*/
+
 package edu.jsu.mcis.cs310.tas_fa22;
 
 import edu.jsu.mcis.cs310.tas_fa22.dao.*;
@@ -7,7 +11,6 @@ import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
 import org.json.simple.*;
 
-// Jakob Skipper test commit
 public class Main {
 
     public static void main(String[] args) {
