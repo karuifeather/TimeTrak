@@ -1,6 +1,6 @@
 /*
-    Authors: Aashaya Aryal, Jakob Skipper, William Hicks
-    Authors: Aashaya Aryal, Jakob Skipper, Caleb Watts
+    Authors: Aashaya Aryal, Jakob Skipper, William Hicks, Caleb Watts
+    
 */
 
 package edu.jsu.mcis.cs310.tas_fa22;
