@@ -31,6 +31,7 @@ public class Punch {
         this.terminalid = terminalid;
         this.badge = badge;
         this.originaltimestamp = originaltimestamp;
+        this.punchtype = punchtype;
     }
 
 }
