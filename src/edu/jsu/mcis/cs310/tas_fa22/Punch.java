@@ -23,7 +23,8 @@ public class Punch {
     }
 
     // for existing punches
-    public Punch(int id,
+    public Punch(
+            int id,
             int terminalid,
             Badge badge,
             LocalDateTime originaltimestamp,
@@ -70,10 +71,9 @@ public class Punch {
         s.append("#");
         s.append(badge.getId()).append(" ");
         s.append(punchtype).append(": ");
+        // get the day of the week and extract first three
         s.append(dayOfTheWeek.name().substring(0, 3)).append(" ");
         s.append(originaltimestamp.format(format));
-
-        System.out.println(s);
 
         return s.toString();
     }
