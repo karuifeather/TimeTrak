@@ -1,5 +1,5 @@
 /*
-    Authors: Aashaya Aryal, Jakob Skipper, William Hicks, Caleb Watts, James Highfield
+    Authors: Aashaya Aryal, Jakob Skipper, William Hicks, Caleb Watts, James Highfield, Kevin Navarrete
     
 */
 
