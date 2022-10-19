@@ -44,11 +44,11 @@ public class Shift {
         return lunchStop;
     }
 
-    public Duration getLunchDuration() {
+    public long getLunchDuration() {
         return lunchDuration;
     }
 
-    public Duration getShiftDuration() {
+    public long getShiftDuration() {
         return shiftDuration;
     }
 
