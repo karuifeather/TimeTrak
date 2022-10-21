@@ -6,17 +6,17 @@ import java.time.DayOfWeek;
 
 public class Punch {
 
-    Integer id;
-    Integer terminalid;
-    Badge badge;
-    EventType punchtype;
-    LocalDateTime originaltimestamp;
-    PunchAdjustmentType adjustedtimestamp; // for future feature
+    private Integer id;
+    private Integer terminalid;
+    private Badge badge;
+    private EventType punchtype;
+    private LocalDateTime originaltimestamp;
+    private PunchAdjustmentType adjustmenttype; // for future feature
 
     // for new punches
     public Punch(int terminalid, Badge badge, EventType punchtype) {
         this.id = null;
-        this.adjustedtimestamp = null;
+        this.adjustmenttype = null;
         this.terminalid = terminalid;
         this.badge = badge;
         this.punchtype = punchtype;
@@ -58,24 +58,21 @@ public class Punch {
     }
 
     public PunchAdjustmentType getAdjustedtimestamp() {
-        return adjustedtimestamp;
+        return adjustmenttype;
     }
 
     public String printOriginal() {
         StringBuilder s = new StringBuilder();
 
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-        DayOfWeek dayOfTheWeek = DayOfWeek.from(originaltimestamp);
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
 
         // "#0FFA272B CLOCK OUT: MON 09/24/2018 17:30:04"
         s.append("#");
         s.append(badge.getId()).append(" ");
         s.append(punchtype).append(": ");
-        // get the day of the week and extract first three
-        s.append(dayOfTheWeek.name().substring(0, 3)).append(" ");
         s.append(originaltimestamp.format(format));
 
-        return s.toString();
+        return s.toString().toUpperCase();
     }
 
     @Override
