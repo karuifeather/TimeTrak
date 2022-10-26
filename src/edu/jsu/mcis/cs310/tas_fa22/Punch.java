@@ -52,7 +52,11 @@ public class Punch {
     public EventType getPunchtype() {
         return punchtype;
     }
-
+    
+    public PunchAdjustmentType getAdjustmenttype() {
+        return adjustmenttype;
+    }
+            
     public LocalDateTime getOriginaltimestamp() {
         return originaltimestamp;
     }
