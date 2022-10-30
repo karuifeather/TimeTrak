@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Employee {
 
-    private int id;
+    private Integer id;
     private String firstname, middlename, lastname;
     private LocalDateTime active;
     private String Badge;
@@ -13,7 +13,7 @@ public class Employee {
     private String employeeType; // temporary/part-time or full-time
 
     // Constructor
-    public Employee(int id, String firstname, String middlename, 
+    public Employee(Integer id, String firstname, String middlename, 
             String lastname, LocalDateTime active, String Badge, 
             String Department, String Shift, String employeeType) 
     {
@@ -28,7 +28,7 @@ public class Employee {
         this.employeeType = employeeType;
     }
     
-    public int getId() {
+    public Integer getId() {
         return id;
     }
     
@@ -62,5 +62,12 @@ public class Employee {
     
     public String getEmployeeType() {
         return employeeType;
+    }
+    
+    @Override
+    public String toString() {
+        
+        return "id: " +id+": "+lastname+", "+firstname+" "+middlename+""
+                + " (#"+Badge+"), "+employeeType+", +Department+"+active;
     }
 }
