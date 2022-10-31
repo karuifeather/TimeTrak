@@ -7,15 +7,15 @@ public class Employee {
     private Integer id;
     private String firstname, middlename, lastname;
     private LocalDateTime active;
-    private Integer badge;
-    private String department; // Location of Employees working Department
-    private String shift; // Assigned Work Shift
+    private Badge badge;
+    private Department department; // Location of Employees working Department
+    private Shift shift; // Assigned Work Shift
     private String employeeType; // temporary/part-time or full-time
 
     // Constructor
     public Employee(Integer id, String firstname, String middlename, 
-            String lastname, LocalDateTime active, Integer badge, 
-            String department, String shift, String employeeType) 
+            String lastname, LocalDateTime active, Badge badge, 
+            Department department, Shift shift, String employeeType) 
     {
         this.id = id;
         this.firstname = firstname;
@@ -48,15 +48,15 @@ public class Employee {
         return active;
     }
     
-    public Integer getBadge() {
+    public Badge getBadge() {
         return badge;
     }
     
-    public String getDepartment() {
+    public Department getDepartment() {
         return department;
     }
     
-    public String getShift() {
+    public Shift getShift() {
         return shift;
     }
     
