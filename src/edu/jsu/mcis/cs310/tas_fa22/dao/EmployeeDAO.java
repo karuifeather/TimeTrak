@@ -42,10 +42,10 @@ public class EmployeeDAO {
                         String middlename = result_set.getString("middlename");
                         LocalDateTime active = LocalDateTime.parse(result_set.getString("active"), formatTime);
                         Badge badge = badgedao.find(result_set.getString("badgeid"));
-                        Department dpt = dptdao.find(result_set.getInt("departmentid"));
+                        Department department = dptdao.find(result_set.getInt("departmentid"));
                         Shift shift = shiftdao.find(badge);
                         EmployeeType employeeType = EmployeeType.values()[result_set.getInt("employeeTypeID")];
-                        employee = new Employee(id, firstname, lastname, middlename, active, badge, dpt, shift, employeeType);
+                        employee = new Employee(id, firstname, lastname, middlename, active, badge, department, shift, employeeType);
              
                     }
                 }
