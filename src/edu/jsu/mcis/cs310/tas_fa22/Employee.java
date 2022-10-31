@@ -4,31 +4,31 @@ import java.time.LocalDateTime;
 
 public class Employee {
 
-    private Integer id;
+    private String id;
     private String firstname, middlename, lastname;
     private LocalDateTime active;
-    private String Badge;
-    private String Department; // Location of Employees working Department
+    private String badge;
+    private String department; // Location of Employees working Department
     private String Shift; // Assigned Work Shift
     private String employeeType; // temporary/part-time or full-time
 
     // Constructor
-    public Employee(Integer id, String firstname, String middlename, 
-            String lastname, LocalDateTime active, String Badge, 
-            String Department, String Shift, String employeeType) 
+    public Employee(String id, String firstname, String middlename, 
+            String lastname, LocalDateTime active, String badge, 
+            String department, String Shift, String employeeType) 
     {
         this.id = id;
         this.firstname = firstname;
         this.middlename = middlename;
         this.lastname = lastname;
         this.active = active;
-        this.Badge = Badge;
-        this.Department = Department;
+        this.badge = badge;
+        this.department = department;
         this.Shift = Shift;
         this.employeeType = employeeType;
     }
     
-    public Integer getId() {
+    public String getId() {
         return id;
     }
     
@@ -49,11 +49,11 @@ public class Employee {
     }
     
     public String getBadge() {
-        return Badge;
+        return badge;
     }
     
     public String getDepartment() {
-        return Department;
+        return department;
     }
     
     public String getShift() {
@@ -68,6 +68,6 @@ public class Employee {
     public String toString() {
         
         return "id: " +id+": "+lastname+", "+firstname+" "+middlename+""
-                + " (#"+Badge+"), "+employeeType+", +Department+"+active;
+                + " (#"+badge+"), "+employeeType+", +department+"+active;
     }
 }
