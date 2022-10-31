@@ -2,15 +2,17 @@ package edu.jsu.mcis.cs310.tas_fa22;
 
 public class Department {
 
-    private final String id, description, terminalid;
+    private final Integer id;
+    private final String description;
+    private final Integer terminalid;
 
-    public Department(String id, String description, String terminalid) {
+    public Department(Integer id, String description, Integer terminalid) {
         this.id = id;
         this.description = description;
         this.terminalid = terminalid;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -18,7 +20,7 @@ public class Department {
         return description;
     }
 
-    public String getTerminalId() {
+    public Integer getTerminalId() {
         return terminalid;
     }
 
