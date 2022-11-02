@@ -9,7 +9,7 @@ public final class DAOFactory {
     private static final String PROPERTY_PASSWORD = "password";
 
     private final String url, username, password;
-    
+
     private Connection conn = null;
 
     public DAOFactory(String prefix) {
@@ -39,14 +39,17 @@ public final class DAOFactory {
     public ShiftDAO getShiftDAO() {
         return new ShiftDAO(this);
     }
-    
+
     public PunchDAO getPunchDAO() {
         return new PunchDAO(this);
     }
-    
+
     public EmployeeDAO getEmployeeDAO() {
         return new EmployeeDAO(this);
     }
     
+    public DepartmentDAO getDepartmentDAO() {
+        return new DepartmentDAO(this);
     }
+
 }
