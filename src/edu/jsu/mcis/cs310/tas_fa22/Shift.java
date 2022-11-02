@@ -6,8 +6,8 @@ import java.time.*;
 public class Shift {
     private String description;
     private LocalTime startTime, stopTime, lunchStart, lunchStop;
-    private int id;
-    private long lunchDuration, shiftDuration;
+    private int id, roundInterval, gracePeriod, dockPenalty;
+    private Duration lunchDuration, shiftDuration;
 
     public Shift(HashMap map) {
         this.id = Integer.parseInt((String)map.get("id"));
@@ -16,8 +16,11 @@ public class Shift {
         this.stopTime = LocalTime.parse((String)map.get("stopTime"));
         this.lunchStart = LocalTime.parse((String)map.get("lunchStart"));
         this.lunchStop = LocalTime.parse((String)map.get("lunchStop"));
-        this.lunchDuration = Duration.between(lunchStart, lunchStop).toMinutes();
-        this.shiftDuration = Duration.between(startTime, stopTime).toMinutes();
+        this.roundInterval = Integer.parseInt((String)map.get("roundInterval"));
+        this.gracePeriod = Integer.parseInt((String)map.get("gracePeriod"));
+        this.dockPenalty = Integer.parseInt((String)map.get("dockPenalty"));
+        this.lunchDuration = Duration.between(lunchStart, lunchStop);
+        this.shiftDuration = Duration.between(startTime, stopTime);
     }
 
     public int getId() {
@@ -44,12 +47,24 @@ public class Shift {
         return lunchStop;
     }
 
-    public long getLunchDuration() {
+    public Duration getLunchDuration() {
         return lunchDuration;
     }
 
-    public long getShiftDuration() {
+    public Duration getShiftDuration() {
         return shiftDuration;
+    }
+
+    public int getRoundInterval() {
+        return roundInterval;
+    }
+
+    public int getGracePeriod() {
+        return gracePeriod;
+    }
+
+    public int getDockPenalty() {
+        return dockPenalty;
     }
 
     @Override
@@ -59,10 +74,10 @@ public class Shift {
         s.append(description).append(": ");
         s.append(startTime).append(" - ");
         s.append(stopTime).append(" (");
-        s.append(shiftDuration).append(" minutes); Lunch: ");
+        s.append(shiftDuration.toMinutes()).append(" minutes); Lunch: ");
         s.append(lunchStart).append(" - ");
         s.append(lunchStop).append(" (");
-        s.append(lunchDuration).append(" minutes)");
+        s.append(lunchDuration.toMinutes()).append(" minutes)");
 
         return s.toString();
 
