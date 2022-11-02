@@ -29,9 +29,10 @@ public class Department {
 
         StringBuilder s = new StringBuilder();
 
-        s.append('#').append(id).append(' ');
-        s.append('(').append(description).append(')');
-        s.append("Terminal ID: ").append(terminalid).append(' ');
+        // "#1 (Assembly), Terminal ID: 103"
+        s.append("#").append(id).append(" ");
+        s.append("(").append(description).append("), ");
+        s.append("Terminal ID: ").append(terminalid);
 
         return s.toString();
     }
