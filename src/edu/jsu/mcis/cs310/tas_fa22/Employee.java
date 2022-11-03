@@ -1,6 +1,7 @@
 package edu.jsu.mcis.cs310.tas_fa22;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Employee {
 
@@ -10,12 +11,12 @@ public class Employee {
     private Badge badge;
     private Department department; // Location of Employees working Department
     private Shift shift; // Assigned Work Shift
-    private String employeeType; // temporary/part-time or full-time
+    private EmployeeType employeeType; // temporary/part-time or full-time
 
     // Constructor
     public Employee(Integer id, String firstname, String middlename, 
             String lastname, LocalDateTime active, Badge badge, 
-            Department department, Shift shift, String employeeType) 
+            Department department, Shift shift, EmployeeType employeeType) 
     {
         this.id = id;
         this.firstname = firstname;
@@ -60,14 +61,14 @@ public class Employee {
         return shift;
     }
     
-    public String getEmployeeType() {
+    public EmployeeType getEmployeeType() {
         return employeeType;
     }
     
     @Override
     public String toString() {
         
-        return "id: " +id+": "+lastname+", "+firstname+" "+middlename+""
-                + " (#"+badge+"), "+employeeType+", +department+"+active;
+        DateTimeFormatter correctDate = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        return "ID #" +id+": "+lastname+", "+firstname+" "+middlename+"" + " (#" +badge.getId()+ "), " + "Type: "+employeeType+"," + " Department: "+department.getDescription()+"," + " Active: "+active.format(correctDate);
     }
 }
