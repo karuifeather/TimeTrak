@@ -11,6 +11,7 @@ public class PunchDAO {
 
     private static final String QUERY_FIND = "SELECT * FROM event WHERE id = ?";
     private static final String QUERY_LIST = "SELECT * FROM event WHERE badgeid = ? ORDER BY timestamp";
+    private static final String QUERY_LIST_E = "SELECT * FROM event WHERE badgeid = ? AND timestamp > ? LIMIT 1";
 
     private final DAOFactory daoFactory;
 
@@ -100,6 +101,7 @@ public class PunchDAO {
     public ArrayList list(Badge badge, LocalDate date) {
         ArrayList<Punch> list = new ArrayList();
         
+        Timestamp ts = Timestamp.valueOf(date.atStartOfDay());
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -123,24 +125,39 @@ public class PunchDAO {
                         Timestamp punchdate = rs.getTimestamp(4);
                         LocalDateTime local = punchdate.toLocalDateTime();
                         LocalDate ld = local.toLocalDate();
-                        boolean isclosed = false;
-                        Punch last = null;
                         
                         if (ld.equals(date)) {
                             int id = rs.getInt(1);
-                            last = find(id);
-                            list.add(last);
-                        } else if ((!isclosed) && (ld.isAfter(date)) && (last != null) && 
-                                (last.getPunchtype() == EventType.CLOCK_IN)) {
-                            int id = rs.getInt(1);
                             list.add(find(id));
-                            isclosed = true;
                         }
                         
                     }
 
                 }
 
+            }
+            
+            if ((list != null) && ((list.get(list.size() - 1)).getPunchtype() == EventType.CLOCK_IN)) {
+                LocalDateTime newdate = list.get(list.size() - 1).getOriginaltimestamp();
+                Timestamp newts = Timestamp.valueOf(newdate);
+                
+                ps = conn.prepareStatement(QUERY_LIST_E);
+                ps.setString(1, badge.getId());
+                ps.setString(2, newts.toString());
+                    
+                boolean hasresults = ps.execute();
+                
+                if (hasresults) {
+                    
+                    rs = ps.getResultSet();
+                    
+                    while (rs.next()) {
+                        int id = rs.getInt(1);
+                        list.add(find(id));
+                    }
+                    
+                }
+                    
             }
 
         } catch (SQLException e) {
