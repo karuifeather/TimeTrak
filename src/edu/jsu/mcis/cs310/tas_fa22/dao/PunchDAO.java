@@ -66,7 +66,13 @@ public class PunchDAO {
                         punch = new Punch(id, terminalid, b, originaltimestamp, punchtype);
 
                     }
-
+//This adds a sample case for us to test later on
+                Statement stmt = conn.createStatement();
+                stmt.executeUpdate("DELETE FROM event WHERE terminalid = '101' AND timestamp = '2018-10-01 20:00:00' AND eventtypeid = '1'");
+                stmt.executeUpdate("DELETE FROM event WHERE terminalid = '101' AND timestamp = '2018-10-01 06:00:00' AND eventtypeid = '1'");
+                
+                stmt.executeUpdate("INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (101, \"95497F63\", \"2018-10-01 20:00:00\", 1)");
+                stmt.executeUpdate("INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (101, \"95497F63\", \"2018-10-02 06:00:00\", 0)");  
                 }
 
             }
@@ -115,7 +121,6 @@ public class PunchDAO {
                 ps.setString(1, badge.getId());
 
                 boolean hasresults = ps.execute();
-
                 if (hasresults) {
 
                     rs = ps.getResultSet();
@@ -191,4 +196,5 @@ public class PunchDAO {
         return list;
         
     }
+ 
 }
