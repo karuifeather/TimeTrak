@@ -63,8 +63,8 @@ public class Punch {
         return originaltimestamp;
     }
 
-    public PunchAdjustmentType getAdjustedtimestamp() {
-        return adjustmenttype;
+    public LocalDateTime getAdjustedtimestamp() {
+        return adjustedtimestamp;
     }
 
     public void adjust(Shift s) {
