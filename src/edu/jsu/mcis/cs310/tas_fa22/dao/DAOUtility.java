@@ -98,7 +98,7 @@ public final class DAOUtility {
 
         shiftDuration = ChronoUnit.MINUTES.between(shiftStart, shiftStop);
 
-        if (shiftDuration > 380) {
+        if (shiftDuration > s.getLunchThreshold()) {
             totalMinutes = shiftDuration - s.getLunchDuration().toMinutes();
         } else {
             totalMinutes = shiftDuration;
