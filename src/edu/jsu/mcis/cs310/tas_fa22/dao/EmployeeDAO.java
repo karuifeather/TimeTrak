@@ -6,32 +6,32 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class EmployeeDAO {
-    
+
     private static final String QUERY_FIND_ID = "SELECT * FROM employee WHERE id = ?";
     private static final String QUERY_FIND_BADGE = "SELECT * FROM employee WHERE badgeid = ?";
-    
+
     private final DAOFactory daofactory;
-    
+
     EmployeeDAO(DAOFactory daofactory) {
         this.daofactory = daofactory;
     }
-    
+
     public Employee find(int id) {
         Employee employee = null;
         PreparedStatement statement = null;
         ResultSet result_set = null;
-        
+
         try {
             Connection conn = daofactory.getConnection();
-            
+
             if (conn.isValid(0)) {
                 statement = conn.prepareStatement(QUERY_FIND_ID);
                 statement.setInt(1, id);
                 boolean foundresults = statement.execute();
-                
+
                 if (foundresults) {
                     result_set = statement.getResultSet();
-                    
+
                     while (result_set.next()) {
                         BadgeDAO badgedao = new BadgeDAO(daofactory);
                         ShiftDAO shiftdao = new ShiftDAO(daofactory);
@@ -46,58 +46,50 @@ public class EmployeeDAO {
                         Shift shift = shiftdao.find(badge);
                         EmployeeType employeeType = EmployeeType.values()[result_set.getInt("employeeTypeID")];
                         employee = new Employee(id, firstname, lastname, middlename, active, badge, department, shift, employeeType);
-             
+
                     }
                 }
             }
-        }
-        
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DAOException(e.getMessage());
-        }
-        
-        finally {
+        } finally {
             if (result_set != null) {
                 try {
                     result_set.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
                 }
-                
-                catch (SQLException e) {
-            throw new DAOException(e.getMessage());
             }
-        }
-            
+
             if (statement != null) {
                 try {
                     result_set.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
                 }
-                
-                catch (SQLException e) {
-            throw new DAOException(e.getMessage());
             }
         }
-    }
-        
+
         return employee;
     }
-    
+
     public Employee find(Badge badge) {
         Employee employee = null;
         PreparedStatement statement = null;
         ResultSet result_set = null;
-        
+
         try {
             Connection conn = daofactory.getConnection();
-            
+
             if (conn.isValid(0)) {
                 statement = conn.prepareStatement(QUERY_FIND_BADGE);
                 statement.setString(1, badge.getId());
-                
+
                 boolean foundresults = statement.execute();
-                
+
                 if (foundresults) {
                     result_set = statement.getResultSet();
-                    
+
                     while (result_set.next()) {
                         ShiftDAO shiftdao = new ShiftDAO(daofactory);
                         DepartmentDAO dptdao = new DepartmentDAO(daofactory);
@@ -114,32 +106,24 @@ public class EmployeeDAO {
                     }
                 }
             }
-        }
-        
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DAOException(e.getMessage());
-        }
-        
-        finally {
+        } finally {
             if (result_set != null) {
                 try {
                     result_set.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
                 }
-                
-                catch (SQLException e) {
-            throw new DAOException(e.getMessage());
             }
-        }
             if (statement != null) {
                 try {
                     result_set.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
                 }
-                
-                catch (SQLException e) {
-            throw new DAOException(e.getMessage());
             }
-    }
-}
+        }
         return employee;
     }
 }

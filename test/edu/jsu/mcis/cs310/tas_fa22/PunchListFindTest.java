@@ -169,7 +169,29 @@ public class PunchListFindTest {
 
     }
     
-    // How can I test for someone who clocks out the day after they clock in?
+    @Test
+    public void testFindPunchListError() {
+
+        BadgeDAO badgeDAO = daoFactory.getBadgeDAO();
+        PunchDAO punchDAO = daoFactory.getPunchDAO();
+
+        /* Create StringBuilders for Test Output */
+        
+        StringBuilder s1 = new StringBuilder();
+        StringBuilder s2 = new StringBuilder();
+
+        /* Create Timestamp and Badge Objects for Punch List */
+        
+        LocalDate ts = LocalDate.of(2018, Month.OCTOBER, 3);
+
+        Badge b = badgeDAO.find("95497F63");
+        
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            ArrayList<Punch> p1 = punchDAO.list(b, ts);
+        });
+
+    }
+    
     @Test
     public void testFindPunchListEdgeCase() {
         
@@ -183,7 +205,7 @@ public class PunchListFindTest {
 
         /* Create Timestamp and Badge Objects for Punch List */
         
-        LocalDate ts = LocalDate.of(2018, Month.SEPTEMBER, 5);
+        LocalDate ts = LocalDate.of(2018, Month.OCTOBER, 1);
 
         Badge b = badgeDAO.find("95497F63");
 
@@ -203,8 +225,8 @@ public class PunchListFindTest {
         ArrayList<Punch> p2 = new ArrayList<>();
 
         /* Add Punches */
-        p2.add(punchDAO.find(3463));
-        p2.add(punchDAO.find(3482));
+        p2.add(punchDAO.find(6887));
+        p2.add(punchDAO.find(6888));
 
         /* Export Punch List #2 Contents to StringBuilder */
         

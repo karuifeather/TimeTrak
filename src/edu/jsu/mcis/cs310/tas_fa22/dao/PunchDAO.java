@@ -10,7 +10,11 @@ public class PunchDAO {
 
     private static final String QUERY_FIND = "SELECT * FROM event WHERE id = ?";
     private static final String QUERY_LIST = "SELECT * FROM event WHERE badgeid = ? ORDER BY timestamp";
+<<<<<<< HEAD
     private static final String QUERY_CREATE = "INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) (?, ?, ?, ?)";
+=======
+    private static final String QUERY_LIST_E = "SELECT * FROM event WHERE badgeid = ? AND timestamp > ? LIMIT 1";
+>>>>>>> 43a04f76a2aff161c468cb4b4f1971ae3e2370a1
 
     private final DAOFactory daoFactory;
 
@@ -65,7 +69,13 @@ public class PunchDAO {
                         punch = new Punch(id, terminalid, b, originaltimestamp, punchtype);
 
                     }
-
+//This adds a sample case for us to test later on
+                Statement stmt = conn.createStatement();
+                stmt.executeUpdate("DELETE FROM event WHERE terminalid = '101' AND timestamp = '2018-10-01 20:00:00' AND eventtypeid = '1'");
+                stmt.executeUpdate("DELETE FROM event WHERE terminalid = '101' AND timestamp = '2018-10-01 06:00:00' AND eventtypeid = '1'");
+                
+                stmt.executeUpdate("INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (101, \"95497F63\", \"2018-10-01 20:00:00\", 1)");
+                stmt.executeUpdate("INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (101, \"95497F63\", \"2018-10-02 06:00:00\", 0)");  
                 }
 
             }
@@ -99,7 +109,12 @@ public class PunchDAO {
 
     public ArrayList list(Badge badge, LocalDate date) {
         ArrayList<Punch> list = new ArrayList();
+<<<<<<< HEAD
 
+=======
+        
+        Timestamp ts = Timestamp.valueOf(date.atStartOfDay());
+>>>>>>> 43a04f76a2aff161c468cb4b4f1971ae3e2370a1
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -113,7 +128,6 @@ public class PunchDAO {
                 ps.setString(1, badge.getId());
 
                 boolean hasresults = ps.execute();
-
                 if (hasresults) {
 
                     rs = ps.getResultSet();
@@ -123,6 +137,7 @@ public class PunchDAO {
                         Timestamp punchdate = rs.getTimestamp(4);
                         LocalDateTime local = punchdate.toLocalDateTime();
                         LocalDate ld = local.toLocalDate();
+<<<<<<< HEAD
                         boolean isclosed = false;
                         Punch last = null;
 
@@ -133,14 +148,41 @@ public class PunchDAO {
                         } else if ((!isclosed) && (ld.isAfter(date)) && (last != null)
                                 && (last.getPunchtype() == EventType.CLOCK_IN)) {
                             int id = rs.getInt(1);
+=======
+                        
+                        if (ld.equals(date)) {
+                            int id = rs.getInt(1);
+>>>>>>> 43a04f76a2aff161c468cb4b4f1971ae3e2370a1
                             list.add(find(id));
-                            isclosed = true;
                         }
 
                     }
 
                 }
 
+            }
+            
+            if ((list != null) && ((list.get(list.size() - 1)).getPunchtype() == EventType.CLOCK_IN)) {
+                LocalDateTime newdate = list.get(list.size() - 1).getOriginaltimestamp();
+                Timestamp newts = Timestamp.valueOf(newdate);
+                
+                ps = conn.prepareStatement(QUERY_LIST_E);
+                ps.setString(1, badge.getId());
+                ps.setString(2, newts.toString());
+                    
+                boolean hasresults = ps.execute();
+                
+                if (hasresults) {
+                    
+                    rs = ps.getResultSet();
+                    
+                    while (rs.next()) {
+                        int id = rs.getInt(1);
+                        list.add(find(id));
+                    }
+                    
+                }
+                    
             }
 
         } catch (SQLException e) {
@@ -239,4 +281,5 @@ public class PunchDAO {
         return punchId;
 
     }
+ 
 }
