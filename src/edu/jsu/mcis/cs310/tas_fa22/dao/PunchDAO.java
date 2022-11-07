@@ -5,12 +5,12 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class PunchDAO {
 
     private static final String QUERY_FIND = "SELECT * FROM event WHERE id = ?";
     private static final String QUERY_LIST = "SELECT * FROM event WHERE badgeid = ? ORDER BY timestamp";
+    private static final String QUERY_CREATE = "INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (?, ?, ?, ?)";
     private static final String QUERY_LIST_E = "SELECT * FROM event WHERE badgeid = ? AND timestamp > ? LIMIT 1";
 
     private final DAOFactory daoFactory;
@@ -100,8 +100,7 @@ public class PunchDAO {
 
     public ArrayList list(Badge badge, LocalDate date) {
         ArrayList<Punch> list = new ArrayList();
-        
-        Timestamp ts = Timestamp.valueOf(date.atStartOfDay());
+
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -115,49 +114,48 @@ public class PunchDAO {
                 ps.setString(1, badge.getId());
 
                 boolean hasresults = ps.execute();
-
                 if (hasresults) {
 
                     rs = ps.getResultSet();
 
                     while (rs.next()) {
-                        
+
                         Timestamp punchdate = rs.getTimestamp(4);
                         LocalDateTime local = punchdate.toLocalDateTime();
                         LocalDate ld = local.toLocalDate();
-                        
+
                         if (ld.equals(date)) {
                             int id = rs.getInt(1);
                             list.add(find(id));
                         }
-                        
+
                     }
 
                 }
 
             }
-            
-            if ((list != null) && ((list.get(list.size() - 1)).getPunchtype() == EventType.CLOCK_IN)) {
+
+            if (((list.get(list.size() - 1)).getPunchtype() == EventType.CLOCK_IN)) {
                 LocalDateTime newdate = list.get(list.size() - 1).getOriginaltimestamp();
                 Timestamp newts = Timestamp.valueOf(newdate);
-                
+
                 ps = conn.prepareStatement(QUERY_LIST_E);
                 ps.setString(1, badge.getId());
                 ps.setString(2, newts.toString());
-                    
+
                 boolean hasresults = ps.execute();
-                
+
                 if (hasresults) {
-                    
+
                     rs = ps.getResultSet();
-                    
+
                     while (rs.next()) {
                         int id = rs.getInt(1);
                         list.add(find(id));
                     }
-                    
+
                 }
-                    
+
             }
 
         } catch (SQLException e) {
@@ -182,13 +180,82 @@ public class PunchDAO {
             }
 
         }
-        
+
         // testing
         for (Punch p : list) {
             System.out.println(p.toString());
         }
-        
+
         return list;
-        
+
+    }
+
+    public int create(Punch newPunch) {
+
+        int punchId = 0;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        EmployeeDAO empDao = daoFactory.getEmployeeDAO();
+        Employee emp = empDao.find(newPunch.getBadge());
+
+        int empTerminalId = emp.getDepartment().getTerminalId();
+
+        if (empTerminalId == newPunch.getTerminalid()) {
+
+            try {
+
+                Connection conn = daoFactory.getConnection();
+
+                if (conn.isValid(0)) {
+
+                    ps = conn.prepareStatement(QUERY_CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
+
+                    ps.setInt(1, newPunch.getTerminalid());
+                    ps.setString(2, newPunch.getBadge().getId());
+                    ps.setString(3, newPunch.getOriginaltimestamp().toString());
+                    ps.setInt(4, newPunch.getPunchtype().ordinal());
+
+                    int rowAffected = ps.executeUpdate();
+
+                    if (rowAffected == 1) {
+
+                        rs = ps.getGeneratedKeys();
+
+                        if (rs.next()) {
+                            punchId = rs.getInt(1);
+                        }
+                    }
+
+                }
+
+            } catch (SQLException e) {
+
+                throw new DAOException(e.getMessage());
+
+            } finally {
+
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException e) {
+                        throw new DAOException(e.getMessage());
+                    }
+                }
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException e) {
+                        throw new DAOException(e.getMessage());
+                    }
+                }
+
+            }
+
+        }
+
+        return punchId;
+
     }
 }
