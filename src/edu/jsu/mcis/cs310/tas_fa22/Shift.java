@@ -6,7 +6,7 @@ import java.time.*;
 public class Shift {
     private String description;
     private LocalTime startTime, stopTime, lunchStart, lunchStop;
-    private int id, roundInterval, gracePeriod, dockPenalty;
+    private int id, roundInterval, gracePeriod, dockPenalty, lunchThreshold;
     private Duration lunchDuration, shiftDuration;
 
     public Shift(HashMap map) {
@@ -19,6 +19,7 @@ public class Shift {
         this.roundInterval = Integer.parseInt((String)map.get("roundInterval"));
         this.gracePeriod = Integer.parseInt((String)map.get("gracePeriod"));
         this.dockPenalty = Integer.parseInt((String)map.get("dockPenalty"));
+        this.lunchThreshold = Integer.parseInt((String)map.get("lunchThreshold"));
         this.lunchDuration = Duration.between(lunchStart, lunchStop);
         this.shiftDuration = Duration.between(startTime, stopTime);
     }
@@ -65,6 +66,10 @@ public class Shift {
 
     public int getDockPenalty() {
         return dockPenalty;
+    }
+
+    public int getLunchThreshold() {
+        return lunchThreshold;
     }
 
     @Override

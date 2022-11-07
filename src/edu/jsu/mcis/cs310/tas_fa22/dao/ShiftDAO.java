@@ -50,6 +50,7 @@ public class ShiftDAO {
                         hashmap.put("roundInterval", rs.getString("roundinterval"));
                         hashmap.put("gracePeriod", rs.getString("graceperiod"));
                         hashmap.put("dockPenalty", rs.getString("dockpenalty"));
+                        hashmap.put("lunchThreshold", rs.getString("lunchthreshold"));
                         shift = new Shift(hashmap);
 
                     }
