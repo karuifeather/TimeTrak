@@ -100,9 +100,7 @@ public class PunchDAO {
 
     public ArrayList list(Badge badge, LocalDate date) {
         ArrayList<Punch> list = new ArrayList();
-
         
-        Timestamp ts = Timestamp.valueOf(date.atStartOfDay());
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -137,7 +135,7 @@ public class PunchDAO {
 
             }
             
-            if ((list != null) && ((list.get(list.size() - 1)).getPunchtype() == EventType.CLOCK_IN)) {
+            if (((list.get(list.size() - 1)).getPunchtype() == EventType.CLOCK_IN)) {
                 LocalDateTime newdate = list.get(list.size() - 1).getOriginaltimestamp();
                 Timestamp newts = Timestamp.valueOf(newdate);
                 
