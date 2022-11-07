@@ -18,10 +18,10 @@ public class Punch {
     // for new punches
     public Punch(int terminalid, Badge badge, EventType punchtype) {
         this.id = null;
-        this.adjustmenttype = null;
         this.terminalid = terminalid;
         this.badge = badge;
         this.punchtype = punchtype;
+        this.originaltimestamp = LocalDateTime.now();
     }
 
     // for existing punches
