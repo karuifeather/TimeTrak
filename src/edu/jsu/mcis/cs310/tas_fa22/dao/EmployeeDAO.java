@@ -18,52 +18,71 @@ public class EmployeeDAO {
 
     public Employee find(int id) {
         Employee employee = null;
-        PreparedStatement statement = null;
-        ResultSet result_set = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
             Connection conn = daofactory.getConnection();
 
             if (conn.isValid(0)) {
-                statement = conn.prepareStatement(QUERY_FIND_ID);
-                statement.setInt(1, id);
-                boolean foundresults = statement.execute();
+                ps = conn.prepareStatement(QUERY_FIND_ID);
+                ps.setInt(1, id);
+                boolean foundresults = ps.execute();
 
                 if (foundresults) {
-                    result_set = statement.getResultSet();
+                    rs = ps.getResultSet();
 
-                    while (result_set.next()) {
+                    while (rs.next()) {
+                        // declaring daos
                         BadgeDAO badgedao = new BadgeDAO(daofactory);
                         ShiftDAO shiftdao = new ShiftDAO(daofactory);
                         DepartmentDAO dptdao = new DepartmentDAO(daofactory);
+
+                        // get required data for employee
                         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                        String firstname = result_set.getString("firstname");
-                        String lastname = result_set.getString("lastname");
-                        String middlename = result_set.getString("middlename");
-                        LocalDateTime active = LocalDateTime.parse(result_set.getString("active"), formatTime);
-                        Badge badge = badgedao.find(result_set.getString("badgeid"));
-                        Department department = dptdao.find(result_set.getInt("departmentid"));
+                        String firstname = rs.getString("firstname");
+                        String lastname = rs.getString("lastname");
+                        String middlename = rs.getString("middlename");
+                        LocalDateTime active = LocalDateTime.parse(rs.getString("active"), formatTime);
+                        EmployeeType employeeType = EmployeeType.values()[rs.getInt("employeeTypeID")];
+
+                        // fill up objects from databases
+                        Badge badge = badgedao.find(rs.getString("badgeid"));
+                        Department dpt = dptdao.find(rs.getInt("departmentid"));
                         Shift shift = shiftdao.find(badge);
-                        EmployeeType employeeType = EmployeeType.values()[result_set.getInt("employeeTypeID")];
-                        employee = new Employee(id, firstname, lastname, middlename, active, badge, department, shift, employeeType);
+
+                        employee = new Employee(
+                                id,
+                                firstname,
+                                middlename,
+                                lastname,
+                                active,
+                                badge,
+                                dpt,
+                                shift,
+                                employeeType);
 
                     }
                 }
             }
+            
         } catch (SQLException e) {
+            
             throw new DAOException(e.getMessage());
+            
         } finally {
-            if (result_set != null) {
+            
+            if (rs != null) {
                 try {
-                    result_set.close();
+                    rs.close();
                 } catch (SQLException e) {
                     throw new DAOException(e.getMessage());
                 }
             }
-
-            if (statement != null) {
+            if (ps != null) {
                 try {
-                    result_set.close();
+                    ps.close();
                 } catch (SQLException e) {
                     throw new DAOException(e.getMessage());
                 }
@@ -75,55 +94,78 @@ public class EmployeeDAO {
 
     public Employee find(Badge badge) {
         Employee employee = null;
-        PreparedStatement statement = null;
-        ResultSet result_set = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
+            
             Connection conn = daofactory.getConnection();
 
             if (conn.isValid(0)) {
-                statement = conn.prepareStatement(QUERY_FIND_BADGE);
-                statement.setString(1, badge.getId());
+                ps = conn.prepareStatement(QUERY_FIND_BADGE);
+                ps.setString(1, badge.getId());
 
-                boolean foundresults = statement.execute();
+                boolean foundresults = ps.execute();
 
                 if (foundresults) {
-                    result_set = statement.getResultSet();
+                    rs = ps.getResultSet();
 
-                    while (result_set.next()) {
+                    while (rs.next()) {
+                        // declaring daos
                         ShiftDAO shiftdao = new ShiftDAO(daofactory);
                         DepartmentDAO dptdao = new DepartmentDAO(daofactory);
+
+                        // get required data for employee
                         DateTimeFormatter formattime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                        int id = result_set.getInt("id");
-                        String firstname = result_set.getString("firstname");
-                        String lastname = result_set.getString("lastname");
-                        String middlename = result_set.getString("middlename");
-                        LocalDateTime active = LocalDateTime.parse(result_set.getString("active"), formattime);
-                        Department dpt = dptdao.find(result_set.getInt("departmentid"));
-                        Shift shift = shiftdao.find(result_set.getInt("shiftid"));
-                        EmployeeType employeeType = EmployeeType.values()[result_set.getInt("employeetypeid")];
-                        employee = new Employee(id, firstname, lastname, middlename, active, badge, dpt, shift, employeeType);
+                        int id = rs.getInt("id");
+                        String firstname = rs.getString("firstname");
+                        String lastname = rs.getString("lastname");
+                        String middlename = rs.getString("middlename");
+                        LocalDateTime active = LocalDateTime.parse(rs.getString("active"), formattime);
+                        EmployeeType employeeType = EmployeeType.values()[rs.getInt("employeeTypeID")];
+
+                        // fill up objects from databases
+                        Department dpt = dptdao.find(rs.getInt("departmentid"));
+                        Shift shift = shiftdao.find(rs.getInt("shiftid"));
+
+                        employee = new Employee(
+                                id,
+                                firstname,
+                                middlename,
+                                lastname,
+                                active,
+                                badge,
+                                dpt,
+                                shift,
+                                employeeType);
+
                     }
                 }
             }
+            
         } catch (SQLException e) {
+            
             throw new DAOException(e.getMessage());
+            
         } finally {
-            if (result_set != null) {
+            
+            if (rs != null) {
                 try {
-                    result_set.close();
+                    rs.close();
                 } catch (SQLException e) {
                     throw new DAOException(e.getMessage());
                 }
             }
-            if (statement != null) {
+            if (ps != null) {
                 try {
-                    result_set.close();
+                    ps.close();
                 } catch (SQLException e) {
                     throw new DAOException(e.getMessage());
                 }
             }
         }
+        
         return employee;
     }
 }
