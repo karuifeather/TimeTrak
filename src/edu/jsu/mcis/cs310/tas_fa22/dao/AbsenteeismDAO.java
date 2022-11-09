@@ -7,6 +7,6 @@ public class AbsenteeismDAO {
     private final DAOFactory daoFactory;
     
     AbsenteeismDAO(DAOFactory daofactory){
-        this.daoFactory =
+        this.daoFactory = daoFactory;
     }
 }

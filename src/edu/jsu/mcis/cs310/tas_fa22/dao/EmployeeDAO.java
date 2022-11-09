@@ -10,10 +10,10 @@ public class EmployeeDAO {
     private static final String QUERY_FIND_ID = "SELECT * FROM employee WHERE id = ?";
     private static final String QUERY_FIND_BADGE = "SELECT * FROM employee WHERE badgeid = ?";
 
-    private final DAOFactory daofactory;
+    private final DAOFactory daoFactory;
 
-    EmployeeDAO(DAOFactory daofactory) {
-        this.daofactory = daofactory;
+    EmployeeDAO(DAOFactory daoFactory) {
+        this.daoFactory = daoFactory;
     }
 
     public Employee find(int id) {
@@ -23,7 +23,7 @@ public class EmployeeDAO {
         ResultSet rs = null;
 
         try {
-            Connection conn = daofactory.getConnection();
+            Connection conn = daoFactory.getConnection();
 
             if (conn.isValid(0)) {
                 ps = conn.prepareStatement(QUERY_FIND_ID);
@@ -35,9 +35,9 @@ public class EmployeeDAO {
 
                     while (rs.next()) {
                         // declaring daos
-                        BadgeDAO badgedao = new BadgeDAO(daofactory);
-                        ShiftDAO shiftdao = new ShiftDAO(daofactory);
-                        DepartmentDAO dptdao = new DepartmentDAO(daofactory);
+                        BadgeDAO badgedao = new BadgeDAO(daoFactory);
+                        ShiftDAO shiftdao = new ShiftDAO(daoFactory);
+                        DepartmentDAO dptdao = new DepartmentDAO(daoFactory);
 
                         // get required data for employee
                         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -100,7 +100,7 @@ public class EmployeeDAO {
 
         try {
             
-            Connection conn = daofactory.getConnection();
+            Connection conn = daoFactory.getConnection();
 
             if (conn.isValid(0)) {
                 ps = conn.prepareStatement(QUERY_FIND_BADGE);
@@ -113,8 +113,8 @@ public class EmployeeDAO {
 
                     while (rs.next()) {
                         // declaring daos
-                        ShiftDAO shiftdao = new ShiftDAO(daofactory);
-                        DepartmentDAO dptdao = new DepartmentDAO(daofactory);
+                        ShiftDAO shiftdao = new ShiftDAO(daoFactory);
+                        DepartmentDAO dptdao = new DepartmentDAO(daoFactory);
 
                         // get required data for employee
                         DateTimeFormatter formattime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
