@@ -227,7 +227,7 @@ public class PunchListFindTest {
         /* Add Punches */
         p2.add(punchDAO.find(6887));
         p2.add(punchDAO.find(6888));
-
+ 
         /* Export Punch List #2 Contents to StringBuilder */
         
         for (Punch p : p2) {
