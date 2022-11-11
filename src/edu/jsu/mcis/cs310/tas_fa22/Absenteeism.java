@@ -6,10 +6,10 @@ public class Absenteeism {
     //class fields
     private Employee employee;
     private LocalDate startDate;
-    private float percent;
+    private Double percent;
     
     //Constructor
-    public Absenteeism(Employee employee, LocalDate startDate, float percent) {
+    public Absenteeism(Employee employee, LocalDate startDate, Double percent) {
         this.employee = employee;
         this.startDate = startDate;
         this.percent = percent;
@@ -28,11 +28,11 @@ public class Absenteeism {
         return startDate;
     }
     
-    public float getPercent() {
+    public Double getPercent() {
         return percent;
     }
     
-    public void setPercent(float percent) {
+    public void setPercent(Double percent) {
         this.percent = percent;
     }
     
