@@ -182,7 +182,7 @@ public class PunchListFindTest {
 
         /* Create Timestamp and Badge Objects for Punch List */
         
-        LocalDate ts = LocalDate.of(2018, Month.OCTOBER, 3);
+        LocalDate ts = LocalDate.of(2018, Month.OCTOBER, 4);
 
         Badge b = badgeDAO.find("95497F63");
         
