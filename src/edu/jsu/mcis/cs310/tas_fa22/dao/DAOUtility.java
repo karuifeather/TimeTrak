@@ -1,6 +1,7 @@
 package edu.jsu.mcis.cs310.tas_fa22.dao;
 
 import edu.jsu.mcis.cs310.tas_fa22.*;
+import java.text.DecimalFormat;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
@@ -106,5 +107,40 @@ public final class DAOUtility {
         }
 
         return (int) totalMinutes;
+    }
+    
+    public static double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s) {
+        
+        ArrayList<Punch> dailyPunches = new ArrayList();
+        
+        Integer ongoingDay = punchlist.get(0).getAdjustedtimestamp().getDayOfMonth();
+        int currentDay;
+        
+        long totalMinutesWorked = 0;
+        long totalWorkExpected = 0;
+        long shiftDuration = s.getShiftDuration().toMinutes();
+        
+        for (Punch p: punchlist) {
+            currentDay = p.getAdjustedtimestamp().getDayOfMonth();
+            
+            if (currentDay != ongoingDay) {
+                // current punch is from a new day
+                
+                totalMinutesWorked += calculateTotalMinutes(dailyPunches, s);
+                totalWorkExpected += shiftDuration;
+                
+                dailyPunches.clear();
+                dailyPunches.add(p);
+                
+                ongoingDay = currentDay;
+            }
+
+            dailyPunches.add(p);
+        }
+        
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        double percent = Double.valueOf(decimalFormat.format((totalMinutesWorked/totalWorkExpected) * 100)); 
+
+        return percent;
     }
 }
