@@ -1,5 +1,6 @@
 package edu.jsu.mcis.cs310.tas_fa22;
 import java.time.LocalDate; 
+import java.time.format.DateTimeFormatter;
 
 
 public class Absenteeism {
@@ -42,12 +43,15 @@ public class Absenteeism {
         
         StringBuilder s = new StringBuilder();
         // "#F1EE0555 (Pay Period Starting 08-05-2018): -20.00%"
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        
         s
                 .append("#")
-                .append(employee)
+                .append(employee.getId())
                 .append(' ')
                 .append("(Pay Period Starting ")
                 .append(startDate)
+                .append(startDate.format(format))
                 .append("): ")
                 .append(percent)
                 .append("%");
