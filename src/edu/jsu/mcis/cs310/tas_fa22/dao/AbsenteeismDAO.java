@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class AbsenteeismDAO {
 
     private static final String QUERY_FIND = "SELECT * FROM absenteeism WHERE id = ?";
-    private static final String QUERY_CREATE = "INSERT INTO absenteeism (employee, startDate, percentage) VALUES (?, ?, ?)";
+    private static final String QUERY_CREATE = "INSERT INTO absenteeism (employeeid, payperiod, percentage) VALUES (?, ?, ?)";
     private static final String QUERY_UPDATE = "UPDATE absenteeism SET percentage = ? WHERE employeeid = ?";
     private final DAOFactory daoFactory;
 
@@ -16,7 +16,7 @@ public class AbsenteeismDAO {
         this.daoFactory = daofactory;
     }
 
-    public Absenteeism find(Employee employee, LocalDate startDate) {
+    public Absenteeism find(Employee employeeid, LocalDate payperiod) {
 
         Absenteeism absent = null;
 
@@ -30,7 +30,7 @@ public class AbsenteeismDAO {
             if (conn.isValid(0)) {
 
                 ps = conn.prepareStatement(QUERY_FIND);
-                ps.setString(1, Integer.toString(employee.getId()));
+                ps.setString(1, Integer.toString(employeeid.getId()));
 
                 boolean hasresults = ps.execute();
 
@@ -42,7 +42,7 @@ public class AbsenteeismDAO {
 
                         double percentage = rs.getDouble("percentage");
 
-                        absent = new Absenteeism(employee, startDate, percentage);
+                        absent = new Absenteeism(employeeid, payperiod, percentage);
                     }
 
                 }

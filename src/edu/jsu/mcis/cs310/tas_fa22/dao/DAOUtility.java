@@ -142,5 +142,5 @@ public final class DAOUtility {
         double percent = Double.valueOf(decimalFormat.format((totalMinutesWorked/totalWorkExpected) * 100)); 
 
         return percent;
-    }
+    }       
 }
