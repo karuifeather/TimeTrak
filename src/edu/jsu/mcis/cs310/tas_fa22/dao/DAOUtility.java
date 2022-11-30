@@ -3,8 +3,8 @@ package edu.jsu.mcis.cs310.tas_fa22.dao;
 import edu.jsu.mcis.cs310.tas_fa22.*;
 import java.text.DecimalFormat;
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import org.json.simple.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,7 +98,15 @@ public final class DAOUtility {
             }
         }
 
+        if (shiftStop == null) {
+            LocalTime sStop = s.getStopTime();
+            LocalDateTime ot = dailypunchlist.get(0).getAdjustedtimestamp();
+            
+            shiftStop = ot.withHour(sStop.getHour()).withMinute(sStop.getMinute()).withSecond(0).withNano(0);
+        }
+        
         shiftDuration = ChronoUnit.MINUTES.between(shiftStart, shiftStop);
+//        shiftDuration = Duration.between(shiftStart, shiftStop).toMinutes();
 
         if (shiftDuration > s.getLunchThreshold()) {
             totalMinutes = shiftDuration - s.getLunchDuration().toMinutes();
@@ -108,38 +116,53 @@ public final class DAOUtility {
 
         return (int) totalMinutes;
     }
-    
+
     public static double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s) {
-        
+
         ArrayList<Punch> dailyPunches = new ArrayList();
         
+        for (Punch punch : punchlist) {
+            punch.adjust(s);
+        }
+
         Integer ongoingDay = punchlist.get(0).getAdjustedtimestamp().getDayOfMonth();
         int currentDay;
-        
+
         long totalMinutesWorked = 0;
         long totalWorkExpected = 0;
         long shiftDuration = s.getShiftDuration().toMinutes();
-        
+
         for (Punch p: punchlist) {
             currentDay = p.getAdjustedtimestamp().getDayOfMonth();
-            
+
             if (currentDay != ongoingDay) {
                 // current punch is from a new day
                 
+                System.out.println("*****************************");
+                
+                for (Punch a: dailyPunches) {
+                    System.out.println(a.getOriginaltimestamp());
+                    System.out.println(a.getAdjustmenttype());
+                }
+                
+                System.out.println("*****************************");
+
                 totalMinutesWorked += calculateTotalMinutes(dailyPunches, s);
                 totalWorkExpected += shiftDuration;
                 
+                
+
                 dailyPunches.clear();
                 dailyPunches.add(p);
-                
+
                 ongoingDay = currentDay;
             }
 
             dailyPunches.add(p);
         }
-        
+
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        double percent = Double.valueOf(decimalFormat.format((totalMinutesWorked/totalWorkExpected) * 100)); 
+        double percent = Double.valueOf(decimalFormat.format((totalMinutesWorked / totalWorkExpected) * 100));
 
         return percent;
     }

@@ -39,7 +39,6 @@ public class Absenteeism {
     //toString Method
     @Override
     public String toString() {
-        
         StringBuilder s = new StringBuilder();
         // "#F1EE0555 (Pay Period Starting 08-05-2018): -20.00%"
         s
@@ -51,9 +50,9 @@ public class Absenteeism {
                 .append("): ")
                 .append(percent)
                 .append("%");
-        
-                return s.toString();
-                
+
+        return s.toString();
+
         
     }
 }

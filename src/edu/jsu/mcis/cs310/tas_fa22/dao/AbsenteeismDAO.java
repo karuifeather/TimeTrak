@@ -7,8 +7,8 @@ import java.time.LocalDate;
 
 public class AbsenteeismDAO {
 
-    private static final String QUERY_FIND = "SELECT * FROM absenteeism WHERE id = ?";
-    private static final String QUERY_CREATE = "INSERT INTO absenteeism (employee, startDate, percentage) VALUES (?, ?, ?)";
+    private static final String QUERY_FIND = "SELECT * FROM absenteeism WHERE employeeid = ?";
+    private static final String QUERY_CREATE = "INSERT INTO absenteeism (employeeid, payperiod, percentage) VALUES (?, ?, ?)";
     private static final String QUERY_UPDATE = "UPDATE absenteeism SET percentage = ? WHERE employeeid = ?";
     private final DAOFactory daoFactory;
 
@@ -85,6 +85,7 @@ public class AbsenteeismDAO {
         Absenteeism absent2 = null;
         absent2 = this.find(newAbsenteeism.getEmployee(), newAbsenteeism.getStartDate());
 
+        
         try {
 
             Connection conn = daoFactory.getConnection();
@@ -118,11 +119,11 @@ public class AbsenteeismDAO {
 
                     if (rowAffected == 1) {
 
-                        rs = ps.getGeneratedKeys();
-
-                        if (rs.next()) {
-                            absentId = rs.getInt(1);
-                        }
+//                        rs = ps.getGeneratedKeys();
+//
+//                        if (rs.next()) {
+//                            absentId = rs.getInt(1);
+//                        }
                     }
                 }
             }
@@ -149,6 +150,7 @@ public class AbsenteeismDAO {
             }
 
         }
+        
         return absentId;
     }
 }
