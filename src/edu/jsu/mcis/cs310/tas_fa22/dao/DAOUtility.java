@@ -138,19 +138,8 @@ public final class DAOUtility {
             if (currentDay != ongoingDay) {
                 // current punch is from a new day
                 
-                System.out.println("*****************************");
-                
-                for (Punch a: dailyPunches) {
-                    System.out.println(a.getOriginaltimestamp());
-                    System.out.println(a.getAdjustmenttype());
-                }
-                
-                System.out.println("*****************************");
-
                 totalMinutesWorked += calculateTotalMinutes(dailyPunches, s);
                 totalWorkExpected += shiftDuration;
-                
-                
 
                 dailyPunches.clear();
                 dailyPunches.add(p);
@@ -160,6 +149,9 @@ public final class DAOUtility {
 
             dailyPunches.add(p);
         }
+        
+        System.out.println(totalMinutesWorked + " here");
+        System.out.println(totalWorkExpected + " oer");
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         double percent = Double.valueOf(decimalFormat.format((totalMinutesWorked / totalWorkExpected) * 100));
