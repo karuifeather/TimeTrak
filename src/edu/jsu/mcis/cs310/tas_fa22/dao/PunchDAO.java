@@ -181,11 +181,6 @@ public class PunchDAO {
 
         }
 
-        // testing
-        for (Punch p : list) {
-            System.out.println(p.toString());
-        }
-
         return list;
 
     }
