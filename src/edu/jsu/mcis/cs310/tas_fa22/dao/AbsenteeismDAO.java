@@ -16,7 +16,7 @@ public class AbsenteeismDAO {
         this.daoFactory = daofactory;
     }
 
-    public Absenteeism find(Employee employee, LocalDate startDate) {
+    public Absenteeism find(Employee employeeid, LocalDate payperiod) {
 
         Absenteeism absent = null;
 
@@ -30,7 +30,7 @@ public class AbsenteeismDAO {
             if (conn.isValid(0)) {
 
                 ps = conn.prepareStatement(QUERY_FIND);
-                ps.setString(1, Integer.toString(employee.getId()));
+                ps.setString(1, Integer.toString(employeeid.getId()));
 
                 boolean hasresults = ps.execute();
 
@@ -42,7 +42,7 @@ public class AbsenteeismDAO {
 
                         double percentage = rs.getDouble("percentage");
 
-                        absent = new Absenteeism(employee, startDate, percentage);
+                        absent = new Absenteeism(employeeid, payperiod, percentage);
                     }
 
                 }
