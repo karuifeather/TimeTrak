@@ -121,10 +121,6 @@ public final class DAOUtility {
 
         ArrayList<Punch> dailyPunches = new ArrayList();
         
-        for (Punch punch : punchlist) {
-            punch.adjust(s);
-        }
-
         Integer ongoingDay = punchlist.get(0).getAdjustedtimestamp().getDayOfMonth();
         int currentDay;
 
@@ -137,10 +133,18 @@ public final class DAOUtility {
 
             if (currentDay != ongoingDay) {
                 // current punch is from a new day
+                for (Punch a : dailyPunches) {
+                    System.out.println(a.getAdjustedtimestamp().getDayOfMonth());
+                }
                 
                 totalMinutesWorked += calculateTotalMinutes(dailyPunches, s);
-                totalWorkExpected += shiftDuration;
-
+                
+                if (shiftDuration > s.getLunchThreshold()) {
+                    totalWorkExpected += (shiftDuration - s.getLunchDuration().toMinutes());
+                } else {
+                    totalWorkExpected += shiftDuration;
+                }
+                
                 dailyPunches.clear();
                 dailyPunches.add(p);
 
@@ -156,6 +160,6 @@ public final class DAOUtility {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         double percent = Double.valueOf(decimalFormat.format((totalMinutesWorked / totalWorkExpected) * 100));
 
-        return percent;
+        return 100.0 - (double) totalMinutesWorked / (double) totalWorkExpected * 100;
     }       
 }
